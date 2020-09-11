@@ -1,6 +1,7 @@
 import { IncomingMessage, OutgoingHttpHeaders, ServerResponse } from 'http';
 import { readFile, writeFile } from 'fs';
 import { join } from 'path';
+import { args } from './args';
 
 export interface Res {
     data: string;
@@ -9,7 +10,7 @@ export interface Res {
 
 class Cache {
     private cache: Map<string, Res>;
-    private filePath = join(__dirname, 'mock-data.json');
+    private filePath = join(process.cwd(), args.mockPath);
 
     constructor() {
         readFile(this.filePath, (err, data) => {
