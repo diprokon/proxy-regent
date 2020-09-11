@@ -4,10 +4,11 @@
   "description": "",
   "main": "src/index.ts",
   "bin": {
-    "proxy-mock": "src/cli.ts"
+    "proxy-mock": "cli.js"
   },
   "scripts": {
     "start": "ts-node src/index.ts",
+    "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
