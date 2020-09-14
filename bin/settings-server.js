@@ -5,6 +5,7 @@ const expressWS = require("express-ws");
 const args_1 = require("./args");
 const logger_1 = require("./logger");
 const store_1 = require("./store");
+const path_1 = require("path");
 const { app } = expressWS(express());
 app.ws('/api', function (ws, req) {
     function json(key, data) {
@@ -29,7 +30,7 @@ app.ws('/api', function (ws, req) {
         store_1.cache.removeListener('updated', onUpdates);
     });
 });
-app.use(express.static('static'));
+app.use(express.static(path_1.join(__dirname, '../static')));
 app.listen(args_1.args.settingsPort, () => {
     logger_1.say(`Settings panel: http://localhost:${args_1.args.settingsPort}`);
 });

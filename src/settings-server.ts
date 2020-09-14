@@ -3,6 +3,7 @@ import * as expressWS from 'express-ws';
 import { args } from './args';
 import { say } from './logger';
 import { cache } from './store';
+import { join } from 'path';
 
 const { app } = expressWS(express());
 
@@ -34,7 +35,7 @@ app.ws('/api', function (ws, req) {
     });
 });
 
-app.use(express.static('static'));
+app.use(express.static(join(__dirname, '../static')));
 
 app.listen(args.settingsPort, () => {
     say(`Settings panel: http://localhost:${args.settingsPort}`);
