@@ -2,13 +2,14 @@ import { IncomingMessage, OutgoingHttpHeaders, ServerResponse } from 'http';
 import { existsSync, mkdirSync, readFile, writeFile } from 'fs';
 import { dirname, join } from 'path';
 import { args } from './args';
+import { EventEmitter } from 'events';
 
 export interface Res {
     data: string;
     headers: OutgoingHttpHeaders;
 }
 
-class Cache {
+class Cache extends EventEmitter {
     private cache: Map<string, Res>;
     private filePath = join(process.cwd(), args.mockPath);
 
@@ -17,12 +18,14 @@ class Cache {
     ];
 
     constructor() {
+        super();
         readFile(this.filePath, (err, data) => {
             let v;
             if (data) {
                 v = data.toString();
             }
             this.cache = new Map<string, Res>(v ? Object.entries(JSON.parse(v)) : []);
+            this.emit('inited');
         });
     }
 
@@ -42,6 +45,15 @@ class Cache {
         this.write();
     }
 
+    remove(key: string) {
+        this.cache.delete(key);
+        this.write();
+    }
+
+    getAllKeys(): string[] {
+        return Array.from(this.cache.keys());
+    }
+
     private getKey(req: IncomingMessage): string {
         return `${req.url}`;
     }
@@ -58,11 +70,13 @@ class Cache {
             if (err) {
                 console.error(err);
             }
+
+            this.emit('updated');
         });
     }
 }
 
-const cache = new Cache();
+export const cache = new Cache();
 
 export function get(req: IncomingMessage, res: ServerResponse): boolean {
     const value = cache.get(req);

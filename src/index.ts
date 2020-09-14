@@ -1,8 +1,10 @@
 import * as http from 'http';
 import * as httpProxy from 'http-proxy';
 import { get, set } from './store';
-import { error, info, log } from './logger';
+import { error, info, log, say } from './logger';
 import { args } from './args';
+
+import './settings-server';
 
 const port = parseInt(args.port, 10);
 const target = args.target;
@@ -10,7 +12,7 @@ if (!target) {
     error('Please provide target url: -t <target>');
 }
 
-info('Starting....');
+say('Starting....');
 const proxy = httpProxy.createProxyServer();
 
 proxy.on('proxyRes', (proxyRes, req, res) => {
@@ -32,7 +34,7 @@ const server = http.createServer((req, res) => {
     }
 });
 server.listen(port);
-server.on('listening', () => info(`Proxy listening: localhost:${port} -> ${target}`));
+server.on('listening', () => say(`Proxy listening: localhost:${port} -> ${target}`));
 server.on('error', console.error);
 
 

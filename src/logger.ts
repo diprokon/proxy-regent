@@ -1,6 +1,10 @@
 import * as chalk from 'chalk';
 import { args } from './args';
 
+export function say(text: string): void {
+    console.log(chalk.blueBright(text));
+}
+
 export function info(text: string): void {
     console.log(`%s ${text}`, chalk.cyan('INFO'));
 }

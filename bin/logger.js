@@ -1,8 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.error = exports.log = exports.info = void 0;
+exports.error = exports.log = exports.info = exports.say = void 0;
 const chalk = require("chalk");
 const args_1 = require("./args");
+function say(text) {
+    console.log(chalk.blueBright(text));
+}
+exports.say = say;
 function info(text) {
     console.log(`%s ${text}`, chalk.cyan('INFO'));
 }
