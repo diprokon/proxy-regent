@@ -12,6 +12,10 @@ class Cache {
     private cache: Map<string, Res>;
     private filePath = join(process.cwd(), args.mockPath);
 
+    private skip: RegExp[] = [
+        /api\/testlogin/,
+    ];
+
     constructor() {
         readFile(this.filePath, (err, data) => {
             let v;
@@ -23,6 +27,9 @@ class Cache {
     }
 
     get(req: IncomingMessage): Res {
+        if (this.skip.some(regExp => regExp.test(req.url))) {
+            return null;
+        }
         const key = this.getKey(req);
         if (!this.cache.has(key)) {
             return null;

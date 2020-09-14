@@ -7,6 +7,9 @@ const args_1 = require("./args");
 class Cache {
     constructor() {
         this.filePath = path_1.join(process.cwd(), args_1.args.mockPath);
+        this.skip = [
+            /api\/testlogin/,
+        ];
         fs_1.readFile(this.filePath, (err, data) => {
             let v;
             if (data) {
@@ -16,6 +19,9 @@ class Cache {
         });
     }
     get(req) {
+        if (this.skip.some(regExp => regExp.test(req.url))) {
+            return null;
+        }
         const key = this.getKey(req);
         if (!this.cache.has(key)) {
             return null;
@@ -34,6 +40,9 @@ class Cache {
         this.cache.forEach((v, k) => {
             res[k] = v;
         });
+        if (!fs_1.existsSync(path_1.dirname(this.filePath))) {
+            fs_1.mkdirSync(path_1.dirname(this.filePath));
+        }
         fs_1.writeFile(this.filePath, JSON.stringify(res), (err) => {
             if (err) {
                 console.error(err);
