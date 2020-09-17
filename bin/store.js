@@ -8,6 +8,7 @@ const events_1 = require("events");
 class Cache extends events_1.EventEmitter {
     constructor() {
         super();
+        this.isActive = true;
         this.filePath = path_1.join(process.cwd(), args_1.args.mockPath);
         this.skip = [
             /api\/testlogin/,
@@ -32,6 +33,9 @@ class Cache extends events_1.EventEmitter {
         return this.cache.get(key);
     }
     set(req, value) {
+        if (this.skip.some(regExp => regExp.test(req.url))) {
+            return null;
+        }
         this.cache.set(this.getKey(req), value);
         this.write();
     }

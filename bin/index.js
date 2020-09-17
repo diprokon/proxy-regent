@@ -14,11 +14,15 @@ if (!target) {
 logger_1.say('Starting....');
 const proxy = httpProxy.createProxyServer();
 proxy.on('proxyRes', (proxyRes, req, res) => {
-    store_1.set(req, proxyRes);
+    if (store_1.cache.isActive) {
+        store_1.set(req, proxyRes);
+    }
 });
 const server = http.createServer((req, res) => {
-    const cache = store_1.get(req, res);
-    if (!cache) {
+    if (store_1.cache.isActive && store_1.get(req, res)) {
+        logger_1.log(`from cache -> ${req.url}`);
+    }
+    else {
         logger_1.info(`-> ${req.url}`);
         proxy.web(req, res, {
             target,
@@ -26,9 +30,6 @@ const server = http.createServer((req, res) => {
             autoRewrite: true,
             changeOrigin: true
         });
-    }
-    else {
-        logger_1.log(`from cache -> ${req.url}`);
     }
 });
 server.listen(port);
