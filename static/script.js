@@ -6,7 +6,7 @@ function createItem(key) {
     el.className = 'list-group-item d-flex justify-content-between align-items-center';
     el.innerHTML = `
         ${key}
-        <span class="badge badge-danger removeBtn" data-key="${key}">Remove</span>
+        <span class="badge badge-danger removeBtn pointer" data-key="${key}">Remove</span>
     `;
     return el;
 }
@@ -21,6 +21,15 @@ function render(keys) {
     keys.forEach(key => {
         container.appendChild(createItem(key));
     });
+}
+
+const disableAllBtn = document.getElementById('disableRequests');
+const classes = ['badge-info', 'badge-danger'];
+
+function setDisableButton(isActive) {
+    disableAllBtn.classList.remove(classes[isActive ? 0 : 1]);
+    disableAllBtn.classList.add(classes[isActive ? 1 : 0]);
+    disableAllBtn.innerHTML = isActive ? 'Disable' : 'Enable';
 }
 
 function init() {
@@ -39,6 +48,9 @@ function init() {
             case 'allKeys':
                 render(data);
                 break;
+            case 'state':
+                setDisableButton(data);
+                break;
         }
     }
 
@@ -49,6 +61,12 @@ function init() {
             }
             const key = event.target.getAttribute('data-key');
             send('remove', {key});
+        });
+
+    disableAllBtn
+        .addEventListener('click', () => {
+            const isActive = disableAllBtn.classList.contains(classes[1]);
+            send('toggleState', !isActive);
         });
 }
 

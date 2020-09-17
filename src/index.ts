@@ -1,6 +1,6 @@
 import * as http from 'http';
 import * as httpProxy from 'http-proxy';
-import { get, set } from './store';
+import { cache, get, set } from './store';
 import { error, info, log, say } from './logger';
 import { args } from './args';
 
@@ -16,12 +16,15 @@ say('Starting....');
 const proxy = httpProxy.createProxyServer();
 
 proxy.on('proxyRes', (proxyRes, req, res) => {
-    set(req, proxyRes);
+    if (cache.isActive) {
+        set(req, proxyRes);
+    }
 });
 
 const server = http.createServer((req, res) => {
-    const cache = get(req, res);
-    if (!cache) {
+    if (cache.isActive && get(req, res)) {
+        log(`from cache -> ${req.url}`);
+    } else {
         info(`-> ${req.url}`);
         proxy.web(req, res, {
             target,
@@ -29,8 +32,6 @@ const server = http.createServer((req, res) => {
             autoRewrite: true,
             changeOrigin: true
         });
-    } else {
-        log(`from cache -> ${req.url}`);
     }
 });
 server.listen(port);

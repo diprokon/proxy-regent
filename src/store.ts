@@ -10,6 +10,8 @@ export interface Res {
 }
 
 class Cache extends EventEmitter {
+    public isActive = true;
+
     private cache: Map<string, Res>;
     private filePath = join(process.cwd(), args.mockPath);
 
@@ -41,6 +43,9 @@ class Cache extends EventEmitter {
     }
 
     set(req: IncomingMessage, value: Res) {
+        if (this.skip.some(regExp => regExp.test(req.url))) {
+            return null;
+        }
         this.cache.set(this.getKey(req), value);
         this.write();
     }

@@ -28,11 +28,16 @@ app.ws('/api', function (ws, req) {
             case 'remove':
                 cache.remove(data.key);
                 break;
+            case 'toggleState':
+                cache.isActive = data;
+                json('state', cache.isActive);
+                break;
         }
     });
     ws.on('close', () => {
         cache.removeListener('updated', onUpdates);
     });
+    json('state', cache.isActive);
 });
 
 app.use(express.static(join(__dirname, '../static')));
