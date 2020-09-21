@@ -1,12 +1,17 @@
 let container;
 let socket;
 
-function createItem(key) {
+function isSuccessStatus(status) {
+    return status < 400;
+}
+
+function createItem(res) {
     const el = document.createElement('li');
     el.className = 'list-group-item d-flex justify-content-between align-items-center';
     el.innerHTML = `
-        ${key}
-        <span class="badge badge-danger removeBtn pointer" data-key="${key}">Remove</span>
+        <span class="badge badge-${isSuccessStatus(res.status) ? 'success' : 'danger'} removeBtn pointer" data-key="${res.key}">Remove</span>
+        ${res.key}
+        <span class="badge badge-danger removeBtn pointer" data-key="${res.key}">Remove</span>
     `;
     return el;
 }

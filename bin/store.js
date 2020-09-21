@@ -43,9 +43,6 @@ class Cache extends events_1.EventEmitter {
         this.cache.delete(key);
         this.write();
     }
-    getAllKeys() {
-        return Array.from(this.cache.keys());
-    }
     getKey(req) {
         return `${req.url}`;
     }
@@ -76,6 +73,7 @@ function get(req, res) {
         res.setHeader(k, value.headers[k]);
     });
     res.write(value.data);
+    res.statusCode = value.status;
     res.end();
     return true;
 }
@@ -88,7 +86,8 @@ function set(req, proxyRes) {
     proxyRes.on('close', (arr) => {
         exports.cache.set(req, {
             data: Buffer.concat(data).toString(),
-            headers: proxyRes.headers
+            headers: proxyRes.headers,
+            status: proxyRes.statusCode
         });
     });
 }

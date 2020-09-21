@@ -7,19 +7,22 @@ const logger_1 = require("./logger");
 const store_1 = require("./store");
 const path_1 = require("path");
 const { app } = expressWS(express());
+function getAllKeys() {
+    return Array.from(store_1.cache.cache.entries()).map(([key, res]) => ({ key, status: res.status }));
+}
 app.ws('/api', function (ws, req) {
     function json(key, data) {
         ws.send(JSON.stringify({ key, data }));
     }
     function onUpdates() {
-        json('allKeys', store_1.cache.getAllKeys());
+        json('allKeys', getAllKeys());
     }
     store_1.cache.addListener('updated', onUpdates);
     ws.on('message', function (msg) {
         const { action, data } = JSON.parse(msg);
         switch (action) {
             case 'allKeys':
-                json('allKeys', store_1.cache.getAllKeys());
+                json('allKeys', getAllKeys());
                 break;
             case 'remove':
                 store_1.cache.remove(data.key);

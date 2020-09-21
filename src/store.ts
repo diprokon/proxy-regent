@@ -7,12 +7,13 @@ import { EventEmitter } from 'events';
 export interface Res {
     data: string;
     headers: OutgoingHttpHeaders;
+    status: number;
 }
 
 class Cache extends EventEmitter {
     public isActive = true;
 
-    private cache: Map<string, Res>;
+    cache: Map<string, Res>;
     private filePath = join(process.cwd(), args.mockPath);
 
     private skip: RegExp[] = [
@@ -55,10 +56,6 @@ class Cache extends EventEmitter {
         this.write();
     }
 
-    getAllKeys(): string[] {
-        return Array.from(this.cache.keys());
-    }
-
     private getKey(req: IncomingMessage): string {
         return `${req.url}`;
     }
@@ -93,6 +90,7 @@ export function get(req: IncomingMessage, res: ServerResponse): boolean {
             res.setHeader(k, value.headers[k]);
         });
     res.write(value.data);
+    res.statusCode = value.status;
     res.end();
     return true;
 }
@@ -105,7 +103,8 @@ export function set(req: IncomingMessage, proxyRes: IncomingMessage): void {
     proxyRes.on('close', (arr) => {
         cache.set(req, {
             data: Buffer.concat(data).toString(),
-            headers: proxyRes.headers
+            headers: proxyRes.headers,
+            status: proxyRes.statusCode
         });
     });
 }

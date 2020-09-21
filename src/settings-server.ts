@@ -7,6 +7,9 @@ import { join } from 'path';
 
 const { app } = expressWS(express());
 
+function getAllKeys() {
+    return Array.from(cache.cache.entries()).map(([key, res]) => ({key, status: res.status}));
+}
 
 app.ws('/api', function (ws, req) {
     function json(key: string, data: any) {
@@ -14,7 +17,7 @@ app.ws('/api', function (ws, req) {
     }
 
     function onUpdates() {
-        json('allKeys', cache.getAllKeys());
+        json('allKeys', getAllKeys());
     }
 
     cache.addListener('updated', onUpdates);
@@ -23,7 +26,7 @@ app.ws('/api', function (ws, req) {
         const { action, data } = JSON.parse(msg);
         switch (action) {
             case 'allKeys':
-                json('allKeys', cache.getAllKeys());
+                json('allKeys', getAllKeys());
                 break;
             case 'remove':
                 cache.remove(data.key);
