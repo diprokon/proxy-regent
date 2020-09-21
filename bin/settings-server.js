@@ -8,7 +8,7 @@ const store_1 = require("./store");
 const path_1 = require("path");
 const { app } = expressWS(express());
 function getAllKeys() {
-    return Array.from(store_1.cache.cache.entries()).map(([key, res]) => ({ key, status: res.status }));
+    return Array.from(store_1.cache.cache.entries()).map(([key, res]) => ({ key, status: 'status' in res ? res.status : 200 }));
 }
 app.ws('/api', function (ws, req) {
     function json(key, data) {

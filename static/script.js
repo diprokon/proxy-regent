@@ -9,7 +9,7 @@ function createItem(res) {
     const el = document.createElement('li');
     el.className = 'list-group-item d-flex justify-content-between align-items-center';
     el.innerHTML = `
-        <span class="badge badge-${isSuccessStatus(res.status) ? 'success' : 'danger'} removeBtn pointer" data-key="${res.key}">Remove</span>
+        <span class="badge badge-${isSuccessStatus(res.status) ? 'success' : 'danger'}">${res.status}</span>
         ${res.key}
         <span class="badge badge-danger removeBtn pointer" data-key="${res.key}">Remove</span>
     `;

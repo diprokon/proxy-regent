@@ -8,7 +8,7 @@ import { join } from 'path';
 const { app } = expressWS(express());
 
 function getAllKeys() {
-    return Array.from(cache.cache.entries()).map(([key, res]) => ({key, status: res.status}));
+    return Array.from(cache.cache.entries()).map(([key, res]) => ({key, status: 'status' in res ? res.status : 200 }));
 }
 
 app.ws('/api', function (ws, req) {
