@@ -10,7 +10,7 @@ export function info(text: string): void {
 }
 
 export function log(text: string) {
-    if(args.verbose) {
+    if (args.verbose) {
         console.log(`%s ${text}`, chalk.yellow('LOG'));
     }
 }

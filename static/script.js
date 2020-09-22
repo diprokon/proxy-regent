@@ -1,16 +1,35 @@
 let container;
 let socket;
 
+const BUTTON_TYPES = {
+    DISABLED: {
+        className: 'badge-danger',
+        label: 'Disabled',
+    },
+    ENABLED: {
+        className: 'badge-info',
+        label: 'Enabled',
+    },
+};
+
+const BADGE_TYPE = (status) => ({
+    className: isSuccessStatus(res.status) ? 'badge-success' : 'badge-danger',
+    label: status,
+});
+
+const buttonTypeClassNames = Object.values(BUTTON_TYPES).map(type => type.className);
+
 function isSuccessStatus(status) {
     return status < 400;
 }
 
 function createItem(res) {
     const el = document.createElement('li');
+    const badgeType = BADGE_TYPE(res.status);
     el.className = 'list-group-item d-flex justify-content-between align-items-center';
     el.innerHTML = `
-        <span class="badge badge-${isSuccessStatus(res.status) ? 'success' : 'danger'}">${res.status}</span>
-        ${res.key}
+        <span class="badge badge-${badgeType.className}">${badgeType.label}</span>
+        <span>${res.key}</span>
         <span class="badge badge-danger removeBtn pointer" data-key="${res.key}">Remove</span>
     `;
     return el;
@@ -23,18 +42,20 @@ function send(action, data) {
 
 function render(keys) {
     container.innerHTML = '';
-    keys.forEach(key => {
-        container.appendChild(createItem(key));
-    });
+    keys.forEach(key => container.appendChild(createItem(key)));
 }
 
-const disableAllBtn = document.getElementById('disableRequests');
-const classes = ['badge-info', 'badge-danger'];
+const allRequestStatusBtn = document.getElementById('allRequestStatusBtn');
 
-function setDisableButton(isActive) {
-    disableAllBtn.classList.remove(classes[isActive ? 0 : 1]);
-    disableAllBtn.classList.add(classes[isActive ? 1 : 0]);
-    disableAllBtn.innerHTML = isActive ? 'Disable' : 'Enable';
+function clearButtonTypeClasses(btn) {
+    buttonTypeClassNames.forEach(className => btn.classList.contains(className) && btn.classList.remove(className));
+}
+
+function setAllStatusButton(isActive) {
+    const status = isActive ? BUTTON_TYPES.ENABLED : BUTTON_TYPES.DISABLED;
+    clearButtonTypeClasses(allRequestStatusBtn);
+    allRequestStatusBtn.classList.add(status.className);
+    allRequestStatusBtn.innerHTML = status.label;
 }
 
 function init() {
@@ -54,7 +75,7 @@ function init() {
                 render(data);
                 break;
             case 'state':
-                setDisableButton(data);
+                setAllStatusButton(data);
                 break;
         }
     }
@@ -68,9 +89,9 @@ function init() {
             send('remove', {key});
         });
 
-    disableAllBtn
+    allRequestStatusBtn
         .addEventListener('click', () => {
-            const isActive = disableAllBtn.classList.contains(classes[1]);
+            const isActive = allRequestStatusBtn.classList.contains(BUTTON_TYPES.ENABLED.className);
             send('toggleState', !isActive);
         });
 }
