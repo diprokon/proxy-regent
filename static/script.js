@@ -13,7 +13,7 @@ const BUTTON_TYPES = {
 };
 
 const BADGE_TYPE = (status) => ({
-    className: isSuccessStatus(res.status) ? 'badge-success' : 'badge-danger',
+    className: isSuccessStatus(status) ? 'badge-success' : 'badge-danger',
     label: status,
 });
 
