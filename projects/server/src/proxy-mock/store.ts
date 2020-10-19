@@ -1,4 +1,4 @@
-import { IncomingMessage, OutgoingHttpHeaders, ServerResponse } from 'http';
+import { OutgoingHttpHeaders } from 'http';
 import { existsSync, mkdirSync, readFile, writeFile } from 'fs';
 import { dirname, join } from 'path';
 import { EventEmitter } from 'events';
@@ -8,7 +8,12 @@ export interface Res {
     data: string;
     headers: OutgoingHttpHeaders;
     status: number;
+    skip?: boolean;
 }
+
+const skippedHeaders = [
+    'set-cookie',
+];
 
 class Cache extends EventEmitter {
     public isActive = true;
@@ -16,9 +21,7 @@ class Cache extends EventEmitter {
     cache: Map<string, Res>;
     private filePath = join(process.cwd(), args.mockPath);
 
-    private skip: RegExp[] = [
-        /api\/testlogin/,
-    ];
+     private skipKeys: { [key: string]: boolean } = {};
 
     constructor() {
         super();
@@ -32,22 +35,22 @@ class Cache extends EventEmitter {
         });
     }
 
-    get(req: IncomingMessage): Res {
-        if (this.skip.some(regExp => regExp.test(req.url))) {
-            return null;
-        }
-        const key = this.getKey(req);
-        if (!this.cache.has(key)) {
+    get(key: string): Res {
+        if (
+            !this.isActive
+            || !this.cache.has(key)
+            || this.skipKeys[key]
+        ) {
             return null;
         }
         return this.cache.get(key);
     }
 
-    set(req: IncomingMessage, value: Res) {
-        if (this.skip.some(regExp => regExp.test(req.url))) {
-            return null;
-        }
-        this.cache.set(this.getKey(req), value);
+    set(key: string, value: Res) {
+        skippedHeaders.forEach(header => {
+            delete value.headers[header];
+        });
+        this.cache.set(key, value);
         this.write();
     }
 
@@ -56,8 +59,13 @@ class Cache extends EventEmitter {
         this.write();
     }
 
-    private getKey(req: IncomingMessage): string {
-        return `${req.url}`;
+    skip(key: string, skip: boolean) {
+        if (!this.cache.has(key)) {
+            return;
+        }
+        this.cache.get(key).skip = skip;
+        this.skipKeys[key] = skip;
+        this.write();
     }
 
     private write() {
@@ -80,31 +88,3 @@ class Cache extends EventEmitter {
 
 export const cache = new Cache();
 
-export function get(req: IncomingMessage, res: ServerResponse): boolean {
-    const value = cache.get(req);
-    if (!value) {
-        return false;
-    }
-    Object.keys(value.headers)
-        .forEach(k => {
-            res.setHeader(k, value.headers[k]);
-        });
-    res.write(value.data);
-    res.statusCode = value.status;
-    res.end();
-    return true;
-}
-
-export function set(req: IncomingMessage, proxyRes: IncomingMessage): void {
-    const data = [];
-    proxyRes.on('data', (d) => {
-        data.push(d);
-    });
-    proxyRes.on('close', (arr) => {
-        cache.set(req, {
-            data: Buffer.concat(data).toString(),
-            headers: proxyRes.headers,
-            status: proxyRes.statusCode
-        });
-    });
-}
