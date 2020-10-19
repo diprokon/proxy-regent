@@ -1,6 +1,6 @@
 import * as WSWebSocket from 'ws';
 import { cache } from '../proxy-mock';
-import { WsMessageModel } from '@prm/shared';
+import { WsActionModel } from '@prm/shared';
 import { Api } from './api';
 import { getApiAction } from './api-action';
 
@@ -19,13 +19,15 @@ export class Controller {
         this.api.init();
     }
 
-    send(msg: WsMessageModel) {
+    send(msg: WsActionModel) {
         this.ws.send(JSON.stringify(msg));
     }
 
-    onRequest({action, data}: WsMessageModel) {
-        const apiAction = getApiAction(this.api, action);
-        apiAction(data);
+    onRequest({action, data}: WsActionModel) {
+        const apiActionProp = getApiAction(this.api, action);
+        if (this.api[apiActionProp]) {
+            this.api[apiActionProp](data);
+        }
     }
 
     storeUpdates = () => {

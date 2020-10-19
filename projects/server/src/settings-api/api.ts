@@ -1,4 +1,4 @@
-import { WsMessageModel } from '@prm/shared';
+import { WsActionModel } from '@prm/shared';
 import { cache } from '../proxy-mock';
 import { Action } from './api-action';
 
@@ -7,7 +7,7 @@ function getAllKeys() {
 }
 
 export class Api {
-    constructor(private send: (msg: WsMessageModel) => void) {
+    constructor(private send: (msg: WsActionModel) => void) {
     }
 
     init() {
@@ -18,10 +18,7 @@ export class Api {
     }
 
     storeUpdates() {
-        this.send({
-            action: 'allKeys',
-            data: getAllKeys()
-        });
+        this.allKeys();
     }
 
     @Action('allKeys')
@@ -37,8 +34,8 @@ export class Api {
         cache.remove(key);
     }
 
-    @Action('toggleState')
-    toggleState(state: boolean) {
+    @Action('state')
+    setState(state: boolean) {
         cache.isActive = state;
         this.send({
             action: 'state',

@@ -1,7 +1,7 @@
-import { Action, Actions, State, StateContext } from '@ngxs/store';
+import { Action, State, StateContext } from '@ngxs/store';
 import { Injectable } from '@angular/core';
 import { WsService } from '../../services';
-import { SetState } from './config.actions';
+import { UpdateState } from './config.actions';
 
 export interface ConfigStateModel {
     state: boolean;
@@ -16,13 +16,13 @@ export interface ConfigStateModel {
 @Injectable()
 export class ConfigState {
     constructor(private wsService: WsService) {
-        wsService.registerActions([SetState]);
+        wsService.registerActions([UpdateState]);
     }
 
-    @Action(SetState)
-    setState({patchState}: StateContext<ConfigStateModel>, {state}: SetState) {
+    @Action(UpdateState)
+    setState({patchState}: StateContext<ConfigStateModel>, {data}: UpdateState) {
         patchState({
-            state
+            state: data
         });
     }
 }

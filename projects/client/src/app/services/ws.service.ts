@@ -3,7 +3,7 @@ import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
 import { filter, map } from 'rxjs/operators';
 import { Actions, Store } from '@ngxs/store';
 import { ActionContext, ActionStatus } from '@ngxs/store/src/actions-stream';
-import { WsMessageModel } from '@prm/shared';
+import { WsActionModel } from '@prm/shared';
 import { isWsRequestAction, WsRequestAction, WsResponseAction } from '../shared';
 import { environment } from '../../environments/environment';
 
@@ -11,7 +11,7 @@ import { environment } from '../../environments/environment';
     providedIn: 'root'
 })
 export class WsService {
-    private webSocket: WebSocketSubject<WsMessageModel> = webSocket(environment.wsUrl);
+    private webSocket: WebSocketSubject<WsActionModel> = webSocket(environment.wsUrl);
 
     private readonly actions = new Map<string, WsResponseAction[]>();
 

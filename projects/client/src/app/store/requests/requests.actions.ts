@@ -14,12 +14,10 @@ export class GetAll implements WsRequestAction {
     readonly action = 'allKeys';
 }
 
-export class Remove implements WsRequestAction {
+export class Remove implements WsRequestAction<string> {
     static readonly type = '[Requests] Remove';
     readonly action = 'remove';
-    readonly data: { key: string };
 
-    constructor(public key: string) {
-        this.data = {key};
+    constructor(public data: string) {
     }
 }

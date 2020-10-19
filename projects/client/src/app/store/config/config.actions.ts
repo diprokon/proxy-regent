@@ -1,16 +1,16 @@
 import { WsRequestAction } from '../../shared';
 
-export class SetState {
+export class UpdateState {
     static readonly type = '[Config] Set state';
     static readonly action = 'state';
 
-    constructor(public state: boolean) {
+    constructor(public data: boolean) {
     }
 }
 
-export class ToggleState implements WsRequestAction {
+export class SetState implements WsRequestAction {
     static readonly type = '[Config] Toggle state';
-    readonly action = 'toggleState';
+    readonly action = 'state';
 
     constructor(public data: boolean) {
     }

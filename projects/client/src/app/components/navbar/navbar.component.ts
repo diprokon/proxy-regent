@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { Select, Store } from '@ngxs/store';
-import { ConfigState, ConfigStateModel } from '../../store/config';
+import { ConfigState, ConfigStateModel, SetState } from '../../store';
 import { Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
-import { ToggleState } from '../../store/config';
+import { map } from 'rxjs/operators';
 
 @Component({
     selector: 'prm-navbar',
@@ -21,7 +20,6 @@ export class NavbarComponent implements OnInit {
     constructor(private store: Store) {
         this.configs$
             .pipe(
-                tap(console.log),
                 map(config => config.state)
             )
             .subscribe(state => this.state = state);
@@ -31,6 +29,6 @@ export class NavbarComponent implements OnInit {
     }
 
     toddleState(value: MatSlideToggleChange) {
-        this.store.dispatch(new ToggleState(value.checked));
+        this.store.dispatch(new SetState(value.checked));
     }
 }
