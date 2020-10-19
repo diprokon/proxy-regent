@@ -1,10 +1,6 @@
-import { WsActionModel } from '@prm/shared';
+import { RequestItem, WsActionModel } from '@prm/shared';
 import { cache } from '../proxy-mock';
 import { Action } from './api-action';
-
-function getAllKeys() {
-    return Array.from(cache.cache.entries()).map(([key, res]) => ({key, status: 'status' in res ? res.status : 200}));
-}
 
 export class Api {
     constructor(private send: (msg: WsActionModel) => void) {
@@ -23,9 +19,16 @@ export class Api {
 
     @Action('allKeys')
     allKeys() {
+        const allKeys: RequestItem[] = Array.from(cache.cache.entries())
+            .map(([key, res]) => ({
+                key,
+                status: 'status' in res ? res.status : 200,
+                skip: !!res.skip
+            }))
+
         this.send({
             action: 'allKeys',
-            data: getAllKeys()
+            data: allKeys
         });
     }
 
@@ -41,5 +44,10 @@ export class Api {
             action: 'state',
             data: cache.isActive
         })
+    }
+
+    @Action('skipKey')
+    skipKey({key, skip}: { key: string, skip: boolean }) {
+        cache.skip(key, skip);
     }
 }
