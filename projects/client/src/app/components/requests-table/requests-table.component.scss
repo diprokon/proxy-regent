@@ -1,0 +1,12 @@
+@import "helpers";
+
+table {
+  @include mat-elevation(2);
+  max-height: 100%;
+  width: 100%;
+}
+
+.mat-column-actions {
+  width: 50px;
+  text-align: center;
+}

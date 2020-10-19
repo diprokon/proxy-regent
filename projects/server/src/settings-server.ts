@@ -12,8 +12,9 @@ function getAllKeys() {
 }
 
 app.ws('/api', function (ws, req) {
-    function json(key: string, data: any) {
-        ws.send(JSON.stringify({ key, data }));
+    console.log('here');
+    function json(action: string, data: any) {
+        ws.send(JSON.stringify({ action, data }));
     }
 
     function onUpdates() {
@@ -24,6 +25,7 @@ app.ws('/api', function (ws, req) {
 
     ws.on('message', function (msg: string) {
         const { action, data } = JSON.parse(msg);
+        console.log(msg, action, data);
         switch (action) {
             case 'allKeys':
                 json('allKeys', getAllKeys());
@@ -43,7 +45,7 @@ app.ws('/api', function (ws, req) {
     json('state', cache.isActive);
 });
 
-app.use(express.static(join(__dirname, '../static')));
+app.use(express.static(join(__dirname, '../../../static')));
 
 app.listen(args.settingsPort, () => {
     say(`Settings panel: http://localhost:${args.settingsPort}`);

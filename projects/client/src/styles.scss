@@ -1,0 +1,31 @@
+/* You can add global styles to this file, and also import other style files */
+@import 'helpers';
+
+@include mat-core();
+
+@include angular-material-theme($mat-app-theme);
+
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: mat-theme-color(background, background);
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+$colors: primary, accent, warn;
+
+@each $color in $colors {
+  .text-#{$color} {
+    color: mat-theme-color($color);
+  }
+  .bg-#{$color} {
+    background-color: mat-theme-color($color);
+  }
+}
