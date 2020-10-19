@@ -1,6 +1,6 @@
 export interface WsResponseAction {
-  readonly action: string;
-  new(...args: any[]): any;
+    readonly action: string;
+    new(...args: any[]): any;
 }
 
 export interface WsRequestAction<T = any> {

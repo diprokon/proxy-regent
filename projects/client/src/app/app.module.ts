@@ -17,27 +17,27 @@ import { RequestsState, ConfigState } from './store';
 import { NgxsModule } from '@ngxs/store';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    NavbarComponent,
-    RequestsTableComponent
-  ],
-  imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    MatToolbarModule,
-    MatSlideToggleModule,
-    MatTableModule,
-    MatSortModule,
-    MatChipsModule,
-    MatIconModule,
-    MatButtonModule,
-    NgxsModule.forRoot([RequestsState, ConfigState], {
-      developmentMode: !environment.production
-    })
-  ],
-  providers: [],
-  bootstrap: [AppComponent]
+    declarations: [
+        AppComponent,
+        NavbarComponent,
+        RequestsTableComponent
+    ],
+    imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        MatToolbarModule,
+        MatSlideToggleModule,
+        MatTableModule,
+        MatSortModule,
+        MatChipsModule,
+        MatIconModule,
+        MatButtonModule,
+        NgxsModule.forRoot([RequestsState, ConfigState], {
+            developmentMode: !environment.production
+        })
+    ],
+    providers: [],
+    bootstrap: [AppComponent]
 })
 export class AppModule {
 }

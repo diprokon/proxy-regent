@@ -5,27 +5,31 @@
 
 @include angular-material-theme($mat-app-theme);
 
-html, body {
-  height: 100%;
+html,
+body {
+    height: 100%;
 }
 
 body {
-  margin: 0;
-  background: mat-theme-color(background, background);
-  font-family: Roboto, "Helvetica Neue", sans-serif;
+    margin: 0;
+    background: mat-theme-color(background, background);
+    font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
 * {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
-$colors: primary, accent, warn;
+$colors: primary,
+accent,
+warn;
 
 @each $color in $colors {
-  .text-#{$color} {
-    color: mat-theme-color($color);
-  }
-  .bg-#{$color} {
-    background-color: mat-theme-color($color);
-  }
+    .text-#{$color} {
+        color: mat-theme-color($color);
+    }
+
+    .bg-#{$color} {
+        background-color: mat-theme-color($color);
+    }
 }

@@ -5,8 +5,8 @@
 const socketProtocol = (window.location.protocol === 'https:' ? 'wss:' : 'ws:')
 
 export const environment = {
-  production: false,
-  wsUrl: `${socketProtocol}//${window.location.hostname}:3004/api/`
+    production: false,
+    wsUrl: `${socketProtocol}//${window.location.hostname}:3004/api/`
 };
 
 /*

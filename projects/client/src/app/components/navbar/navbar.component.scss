@@ -1,8 +1,9 @@
 @import 'helpers';
+
 :host {
-  @include mat-elevation(2);
+    @include mat-elevation(2);
 }
 
 .spacer {
-  flex: 1 1 auto;
+    flex: 1 1 auto;
 }
