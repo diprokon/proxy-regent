@@ -1,8 +1,8 @@
 import { IncomingMessage, OutgoingHttpHeaders, ServerResponse } from 'http';
 import { existsSync, mkdirSync, readFile, writeFile } from 'fs';
 import { dirname, join } from 'path';
-import { args } from './args';
 import { EventEmitter } from 'events';
+import { args } from '../shared';
 
 export interface Res {
     data: string;
