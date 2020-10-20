@@ -11,7 +11,7 @@ export class SettingsApiServer {
         app.ws('/api', (ws, req) => {
             const controller = new Controller(ws);
         });
-        app.use(express.static(join(__dirname, '../../../static')));
+        app.use(express.static(join(__dirname, '../../../client')));
 
         app.listen(args.settingsPort, () => {
             say(`Settings panel: http://localhost:${args.settingsPort}`);

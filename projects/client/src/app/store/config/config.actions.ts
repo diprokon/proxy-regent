@@ -1,4 +1,4 @@
-import { WsRequestAction } from '../../shared';
+import { WsActionModel } from '@prm/shared';
 
 export class UpdateState {
     static readonly type = '[Config] Set state';
@@ -8,7 +8,7 @@ export class UpdateState {
     }
 }
 
-export class SetState implements WsRequestAction {
+export class SetState implements WsActionModel {
     static readonly type = '[Config] Toggle state';
     readonly action = 'state';
 

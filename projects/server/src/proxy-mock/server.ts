@@ -2,7 +2,7 @@ import { IncomingMessage } from 'http';
 import * as express from 'express';
 import * as HttpProxyServer from 'http-proxy';
 import { cache, Res } from './store';
-import { args, error, info, log, say } from '../shared';
+import { args, info, log, say } from '../shared';
 
 export class ProxyMockServer {
     private port = parseInt(args.port, 10);
@@ -13,7 +13,7 @@ export class ProxyMockServer {
     constructor() {
         this.target = args.target;
         if (!this.target) {
-            error('Please provide target url: -t <target>');
+            throw new Error('Please provide target url: -t <target>');
         }
     }
 

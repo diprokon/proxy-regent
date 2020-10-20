@@ -6,11 +6,12 @@
     "proxy-mock": "cli.js"
   },
   "scripts": {
-    "build": "npm run build:server && npm run build:client",
-    "start:server": "nodemon --watch projects/server -e ts --exec ts-node --project projects/server/tsconfig.server.json projects/server/src/index.ts -t http://localhost",
+    "build": "npm run clean && npm run build:server && npm run build:client",
+    "start:server": "nodemon --watch projects/server -e ts --exec ts-node --project projects/server/tsconfig.server.json projects/server/main.ts -t http://localhost",
     "start:client": "ng serve",
     "build:server": "tsc --project projects/server/tsconfig.server.json",
     "build:client": "ng build --prod",
+    "clean": "node -e \"require('fs-extra').emptyDir('bin');\"",
     "ng": "ng",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "ng lint"
