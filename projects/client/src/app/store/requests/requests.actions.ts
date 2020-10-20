@@ -1,5 +1,4 @@
-import { RequestItem } from '@prm/shared';
-import { WsRequestAction } from '../../shared';
+import { RequestItem, WsActionModel } from '@prm/shared';
 
 export class ReceiveAll {
     static readonly type = '[Requests] Receive all';
@@ -9,12 +8,12 @@ export class ReceiveAll {
     }
 }
 
-export class GetAll implements WsRequestAction {
+export class GetAll implements WsActionModel {
     static readonly type = '[Requests] Get all';
     readonly action = 'allKeys';
 }
 
-export class Remove implements WsRequestAction<string> {
+export class Remove implements WsActionModel<string> {
     static readonly type = '[Requests] Remove';
     readonly action = 'remove';
 

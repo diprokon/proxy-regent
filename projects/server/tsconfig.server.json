@@ -2,10 +2,15 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "outDir": "../../bin/server",
+    "outDir": "../../bin/",
     "types": [],
-    "lib": ["es2018"],
+    "lib": [
+      "es2018"
+    ],
     "module": "commonjs",
     "target": "es2018"
-  }
+  },
+  "files": [
+    "main.ts"
+  ]
 }

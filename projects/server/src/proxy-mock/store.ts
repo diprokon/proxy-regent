@@ -21,7 +21,7 @@ class Cache extends EventEmitter {
     cache: Map<string, Res>;
     private filePath = join(process.cwd(), args.mockPath);
 
-     private skipKeys: { [key: string]: boolean } = {};
+    private skipKeys: { [key: string]: boolean } = {};
 
     constructor() {
         super();
@@ -31,6 +31,10 @@ class Cache extends EventEmitter {
                 v = data.toString();
             }
             this.cache = new Map<string, Res>(v ? Object.entries(JSON.parse(v)) : []);
+            Array.from(this.cache.entries())
+                .forEach(([key, res]) => {
+                    this.skipKeys[key] = !!res.skip;
+                });
             this.emit('inited');
         });
     }
