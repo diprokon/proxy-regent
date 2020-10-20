@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { Select, Store } from '@ngxs/store';
 import { RequestItem } from '@prm/shared';
 import { Remove, RequestsState, SkipKey } from '../../store/requests';
+import { SelectionModel } from '@angular/cdk/collections';
 
 
 @Component({
@@ -15,8 +16,9 @@ import { Remove, RequestsState, SkipKey } from '../../store/requests';
 })
 export class RequestsTableComponent implements AfterViewInit {
 
-    displayedColumns: string[] = ['key', 'status', 'actions'];
+    displayedColumns: string[] = ['checkbox', 'key', 'status', 'actions'];
     dataSource = new MatTableDataSource<RequestItem>();
+    selection = new SelectionModel<RequestItem>(true, []);
 
     @Select(RequestsState)
     requests$: Observable<RequestItem[]>;
@@ -40,6 +42,18 @@ export class RequestsTableComponent implements AfterViewInit {
     }
 
     toddleState(value: MatSlideToggleChange, req: RequestItem) {
-        this.store.dispatch(new SkipKey({ key: req.key, skip: value.checked }));
+        this.store.dispatch(new SkipKey({ key: req.key, skip: !value.checked }));
+    }
+
+    isAllSelected() {
+        const numSelected = this.selection.selected.length;
+        const numRows = this.dataSource.data.length;
+        return numSelected === numRows;
+      }
+
+    masterToggle() {
+        this.isAllSelected() ?
+            this.selection.clear() :
+            this.dataSource.data.forEach(row => this.selection.select(row));
     }
 }

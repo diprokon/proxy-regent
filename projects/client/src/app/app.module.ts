@@ -12,6 +12,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { environment } from '../environments/environment';
 import { RequestsState, ConfigState } from './store';
 import { NgxsModule } from '@ngxs/store';
@@ -32,6 +33,7 @@ import { NgxsModule } from '@ngxs/store';
     MatChipsModule,
     MatIconModule,
     MatButtonModule,
+    MatCheckboxModule,
     NgxsModule.forRoot([RequestsState, ConfigState], {
       developmentMode: !environment.production
     })
