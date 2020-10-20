@@ -19,6 +19,7 @@
     <td mat-cell *matCellDef="let req">
       <button mat-icon-button color="warn" (click)="remove(req)">
         <mat-icon>delete</mat-icon>
+        <mat-slide-toggle [checked]="state" (change)="toddleState($event, req)">{{state ? 'On' : 'Off'}}</mat-slide-toggle>
       </button>
     </td>
   </ng-container>
