@@ -9,6 +9,7 @@ export interface Res {
     headers: OutgoingHttpHeaders;
     status: number;
     skip?: boolean;
+    checked?: boolean;
 }
 
 const skippedHeaders = [

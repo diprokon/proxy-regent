@@ -5,8 +5,8 @@ import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { Observable } from 'rxjs';
 import { Select, Store } from '@ngxs/store';
 import { RequestItem } from '@prm/shared';
-import { Remove, RequestsState, SkipKey } from '../../store/requests';
-import { SelectionModel } from '@angular/cdk/collections';
+import { CheckedKey, Remove, RequestsState, SkipKey } from '../../store/requests';
+import { MatCheckboxChange } from '@angular/material/checkbox';
 
 
 @Component({
@@ -18,7 +18,6 @@ export class RequestsTableComponent implements AfterViewInit {
 
     displayedColumns: string[] = ['checkbox', 'key', 'status', 'actions'];
     dataSource = new MatTableDataSource<RequestItem>();
-    selection = new SelectionModel<RequestItem>(true, []);
 
     @Select(RequestsState)
     requests$: Observable<RequestItem[]>;
@@ -41,19 +40,19 @@ export class RequestsTableComponent implements AfterViewInit {
         this.store.dispatch(new Remove(req.key));
     }
 
-    toddleState(value: MatSlideToggleChange, req: RequestItem) {
+    toggleSkipState(value: MatSlideToggleChange, req: RequestItem) {
         this.store.dispatch(new SkipKey({ key: req.key, skip: !value.checked }));
     }
 
-    isAllSelected() {
-        const numSelected = this.selection.selected.length;
-        const numRows = this.dataSource.data.length;
-        return numSelected === numRows;
-      }
+    toggleCheckedState(value: MatCheckboxChange, req: RequestItem) {
+        this.store.dispatch(new CheckedKey({ key: req?.key, checked: !value.checked }));
+    }
 
-    masterToggle() {
-        this.isAllSelected() ?
-            this.selection.clear() :
-            this.dataSource.data.forEach(row => this.selection.select(row));
+    isAllSelected() {
+        return this.dataSource.data.every(req => req.checked);
+    }
+
+    isSomeSelected() {
+        return this.dataSource.data.some(req => req.checked);
     }
 }

@@ -5,23 +5,22 @@
     <ng-container matColumnDef="checkbox">
         <th mat-header-cell *matHeaderCellDef>
             <mat-checkbox
-                (change)="$event ? masterToggle() : null"
-                [checked]="selection.hasValue() && isAllSelected()"
-                [indeterminate]="selection.hasValue() && !isAllSelected()"
+                (change)="toggleCheckedState($event)"
+                [checked]="isAllSelected()"
+                [indeterminate]="!isAllSelected() && isSomeSelected()"
             ></mat-checkbox>
         </th>
         <td mat-cell *matCellDef="let req">
             <mat-checkbox
-                (click)="$event.stopPropagation()"
-                (change)="$event ? selection.toggle(req) : null"
-                [checked]="selection.isSelected(req)"
+                (change)="toggleCheckedState($event, req)"
+                [checked]="req.checked"
             ></mat-checkbox>
         </td>
     </ng-container>
 
     <ng-container matColumnDef="key">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Url</th>
-        <td mat-cell *matCellDef="let req" (click)="selection.toggle(req)">
+        <td mat-cell *matCellDef="let req">
             {{req.key}}
         </td>
     </ng-container>
@@ -46,7 +45,7 @@
             </button>
             <mat-slide-toggle
                 [checked]="!req.skip"
-                (change)="toddleState($event, req)"
+                (change)="toggleSkipState($event, req)"
             >
                 {{req.skip ? 'Off' : 'On'}}
             </mat-slide-toggle>

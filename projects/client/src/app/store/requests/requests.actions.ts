@@ -22,9 +22,17 @@ export class Remove implements WsActionModel<string> {
 }
 
 export class SkipKey implements WsActionModel<{ key: string, skip: boolean }> {
-    static readonly type = '[Requests] Remove';
+    static readonly type = '[Requests] Skip';
     readonly action = 'skipKey';
 
     constructor(public data: { key: string, skip: boolean }) {
+    }
+}
+
+export class CheckedKey implements WsActionModel<{ key: string, checked: boolean }> {
+    static readonly type = '[Requests] Checked';
+    readonly action = 'checkKey';
+
+    constructor(public data: { key: string, checked: boolean }) {
     }
 }
