@@ -13,19 +13,19 @@ export class GetAll implements WsActionModel {
     readonly action = 'allKeys';
 }
 
-export class Remove implements WsActionModel<string> {
+export class Remove implements WsActionModel<string[]> {
     static readonly type = '[Requests] Remove';
     readonly action = 'remove';
 
-    constructor(public data: string) {
+    constructor(public data: string[]) {
     }
 }
 
-export class SkipKey implements WsActionModel<{ key: string, skip: boolean }> {
+export class SkipKey implements WsActionModel<{ keys: string[], skip: boolean }> {
     static readonly type = '[Requests] Skip';
     readonly action = 'skipKey';
 
-    constructor(public data: { key: string, skip: boolean }) {
+    constructor(public data: { keys: string[], skip: boolean }) {
     }
 }
 

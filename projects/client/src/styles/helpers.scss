@@ -1,8 +1,9 @@
 @import '~@angular/material/theming';
-$mat-app-primary: mat-palette($mat-teal, 900);
-$mat-app-accent: mat-palette($mat-teal, A200, A100, A400);
 
-$mat-app-theme: mat-dark-theme($mat-app-primary, $mat-app-accent);
+$mat-app-primary: mat-palette($mat-cyan, 500);
+$mat-app-accent: mat-palette($mat-orange, A200);
+
+$mat-app-theme: mat-light-theme($mat-app-primary, $mat-app-accent);
 
 @function mat-theme-color($type: primary, $hue: default) {
   $color: map-get($mat-app-theme, $type);

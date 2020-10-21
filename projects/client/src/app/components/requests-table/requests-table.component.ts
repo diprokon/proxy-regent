@@ -5,8 +5,8 @@ import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { Observable } from 'rxjs';
 import { Select, Store } from '@ngxs/store';
 import { RequestItem } from '@prm/shared';
-import { CheckedKey, Remove, RequestsState, SkipKey } from '../../store/requests';
-import { MatCheckboxChange } from '@angular/material/checkbox';
+import { Remove, RequestsState, SkipKey } from '../../store/requests';
+import { SelectionModel } from '@angular/cdk/collections';
 
 
 @Component({
@@ -18,6 +18,7 @@ export class RequestsTableComponent implements AfterViewInit {
 
     displayedColumns: string[] = ['checkbox', 'key', 'status', 'actions'];
     dataSource = new MatTableDataSource<RequestItem>();
+    selection = new SelectionModel<RequestItem>(true, []);
 
     @Select(RequestsState)
     requests$: Observable<RequestItem[]>;
@@ -36,23 +37,27 @@ export class RequestsTableComponent implements AfterViewInit {
         return status < 400;
     }
 
-    remove(req: RequestItem) {
-        this.store.dispatch(new Remove(req.key));
+    remove(reqs: RequestItem[]) {
+        const keys = reqs.map(req => req.key);
+        this.store.dispatch(new Remove(keys));
+        this.selection.clear();
     }
 
-    toggleSkipState(value: MatSlideToggleChange, req: RequestItem) {
-        this.store.dispatch(new SkipKey({ key: req.key, skip: !value.checked }));
-    }
-
-    toggleCheckedState(value: MatCheckboxChange, req: RequestItem) {
-        this.store.dispatch(new CheckedKey({ key: req?.key, checked: !value.checked }));
+    toggleSkipState(value: MatSlideToggleChange, reqs: RequestItem[]) {
+        const keys = reqs.map(req => req.key);
+        this.store.dispatch(new SkipKey({ keys: keys, skip: !value.checked }));
+        this.selection.clear();
     }
 
     isAllSelected() {
-        return this.dataSource.data.every(req => req.checked);
-    }
+        const numSelected = this.selection.selected.length;
+        const numRows = this.dataSource.data.length;
+        return numSelected == numRows;
+      }
 
-    isSomeSelected() {
-        return this.dataSource.data.some(req => req.checked);
+    masterToggle() {
+        this.isAllSelected()
+            ? this.selection.clear()
+            : this.dataSource.data.forEach(req => this.selection.select(req));
     }
 }

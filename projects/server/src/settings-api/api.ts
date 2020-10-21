@@ -24,7 +24,6 @@ export class Api {
                 key,
                 status: 'status' in res ? res.status : 200,
                 skip: !!res.skip,
-                checked: !!res.checked,
             }))
 
         this.send({
@@ -34,8 +33,8 @@ export class Api {
     }
 
     @Action('remove')
-    remove(key: string) {
-        cache.remove(key);
+    remove(keys: string[]) {
+        cache.remove(keys);
     }
 
     @Action('state')
@@ -48,18 +47,7 @@ export class Api {
     }
 
     @Action('skipKey')
-    skipKey({key, skip}: { key: string, skip: boolean }) {
-        cache.skip(key, skip);
-    }
-
-    @Action('checkedKey')
-    checkedKey({key, checked}: { key: string, checked: boolean }) {
-        !key
-            ? cache.cache.forEach(key => key.checked = checked)
-            : cache.cache[key].checked = checked;
-        this.send({
-            action: 'checkedKey',
-            data: cache.isActive
-        })
+    skipKey({keys, skip}: { keys: string[], skip: boolean }) {
+        cache.skip(keys, skip);
     }
 }

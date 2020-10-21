@@ -1,9 +1,14 @@
 <mat-toolbar color="primary">
-  <mat-toolbar-row>
-    <span>
-      Proxy-mock settings
-    </span>
-    <span class="spacer"></span>
-    <mat-slide-toggle [checked]="state" (change)="toggleState($event)">{{state ? 'On' : 'Off'}}</mat-slide-toggle>
-  </mat-toolbar-row>
+    <mat-toolbar-row>
+        <span>
+            Proxy-mock settings
+        </span>
+        <span class="spacer"></span>
+        <mat-slide-toggle
+            [checked]="state"
+            (change)="toggleState($event)"
+        >
+            {{ state ? 'Active' : 'Inactive' }}
+        </mat-slide-toggle>
+    </mat-toolbar-row>
 </mat-toolbar>
