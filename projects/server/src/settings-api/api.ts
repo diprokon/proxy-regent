@@ -23,7 +23,7 @@ export class Api {
             .map(([key, res]) => ({
                 key,
                 status: 'status' in res ? res.status : 200,
-                skip: !!res.skip
+                skip: !!res.skip,
             }))
 
         this.send({
@@ -33,8 +33,8 @@ export class Api {
     }
 
     @Action('remove')
-    remove(key: string) {
-        cache.remove(key);
+    remove(keys: string[]) {
+        cache.remove(keys);
     }
 
     @Action('state')
@@ -47,7 +47,7 @@ export class Api {
     }
 
     @Action('skipKey')
-    skipKey({key, skip}: { key: string, skip: boolean }) {
-        cache.skip(key, skip);
+    skipKey({keys, skip}: { keys: string[], skip: boolean }) {
+        cache.skip(keys, skip);
     }
 }

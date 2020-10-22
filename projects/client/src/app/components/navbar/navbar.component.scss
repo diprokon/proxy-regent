@@ -1,8 +1,13 @@
 @import 'helpers';
+
 :host {
   @include mat-elevation(2);
 }
 
 .spacer {
   flex: 1 1 auto;
+}
+
+mat-toolbar-row {
+    padding: 0 64px;
 }

@@ -28,7 +28,7 @@ export class NavbarComponent implements OnInit {
     ngOnInit(): void {
     }
 
-    toddleState(value: MatSlideToggleChange) {
+    toggleState(value: MatSlideToggleChange) {
         this.store.dispatch(new SetState(value.checked));
     }
 }

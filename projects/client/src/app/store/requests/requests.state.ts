@@ -2,7 +2,7 @@ import { Action, NgxsOnInit, State, StateContext, Store } from '@ngxs/store';
 import { Injectable } from '@angular/core';
 import { RequestItem } from '@prm/shared';
 import { WsService } from '../../services';
-import { GetAll, ReceiveAll, Remove } from './requests.actions';
+import { GetAll, ReceiveAll } from './requests.actions';
 
 export type RequestsStateModel = RequestItem[];
 

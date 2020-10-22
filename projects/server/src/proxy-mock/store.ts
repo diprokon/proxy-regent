@@ -58,17 +58,19 @@ class Cache extends EventEmitter {
         this.write();
     }
 
-    remove(key: string) {
-        this.cache.delete(key);
+    remove(keys: string[]) {
+        keys.forEach(key => this.cache.delete(key));
         this.write();
     }
 
-    skip(key: string, skip: boolean) {
-        if (!this.cache.has(key)) {
-            return;
-        }
-        this.cache.get(key).skip = skip;
-        this.skipKeys[key] = skip;
+    skip(keys: string[], skip: boolean) {
+        keys.forEach(key => {
+            if (!this.cache.has(key)) {
+                return;
+            }
+            this.cache.get(key).skip = skip;
+            this.skipKeys[key] = skip;
+        })
         this.write();
     }
 
