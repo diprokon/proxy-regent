@@ -70,8 +70,8 @@ class Cache extends EventEmitter {
             }
             this.cache.get(key).skip = skip;
             this.skipKeys[key] = skip;
-            this.write();
         })
+        this.write();
     }
 
     private write() {

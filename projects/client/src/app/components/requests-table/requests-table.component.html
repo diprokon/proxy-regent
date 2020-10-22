@@ -1,27 +1,30 @@
 <table mat-table [dataSource]="dataSource" matSort>
-    <tr mat-header-row *matHeaderRowDef="['checked-amount', 'bulk-action']; sticky: true" class="extra-header"></tr>
+    <tr mat-header-row *matHeaderRowDef="['checked-amount', 'bulk-action']; sticky: true" [class.bg-accent]="selection.selected.length"></tr>
     <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
     <tr mat-row *matRowDef="let req; columns: displayedColumns;"
         (click)="selection.toggle(req)"
     ></tr>
 
     <ng-container matColumnDef="checked-amount">
-        <th mat-header-cell *matHeaderCellDef [attr.colspan]="2" class="extra-header"> {{ selection.selected.length }} requests selected </th>
+        <th mat-header-cell *matHeaderCellDef [attr.colspan]="2" class="extra-header">
+            {{ selection.selected.length ? (selection.selected.length + ' request' + (selection.selected.length === 1 ? '' : 's') + ' selected') : 'Requests' }}
+        </th>
     </ng-container>
 
     <ng-container matColumnDef="bulk-action">
         <th mat-header-cell *matHeaderCellDef [attr.colspan]="2">
+<!--        <mat-slide-toggle
+                [checked]="true"
+                (change)="toggleSkipState($event, selection.selected)"
+            ></mat-slide-toggle> -->
             <button mat-icon-button
+                *ngIf="selection.selected.length"
                 color="warn"
                 [disabled]="!selection.selected.length"
                 (click)="remove(selection.selected)"
             >
                 <mat-icon>delete</mat-icon>
             </button>
-            <mat-slide-toggle
-                [checked]="true"
-                (change)="toggleSkipState($event, selection.selected)"
-            ></mat-slide-toggle>
         </th>
     </ng-container>
 
@@ -58,19 +61,18 @@
 
     <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef>
-            <mat-icon>more_vert</mat-icon>
         </th>
         <td mat-cell *matCellDef="let req">
+            <mat-slide-toggle
+                [checked]="!req.skip"
+                (change)="toggleSkipState($event, [ req ])"
+            ></mat-slide-toggle>
             <button mat-icon-button
                 color="warn"
                 (click)="remove([ req ])"
             >
                 <mat-icon>delete</mat-icon>
             </button>
-            <mat-slide-toggle
-                [checked]="!req.skip"
-                (change)="toggleSkipState($event, [ req ])"
-            ></mat-slide-toggle>
         </td>
     </ng-container>
 </table>
