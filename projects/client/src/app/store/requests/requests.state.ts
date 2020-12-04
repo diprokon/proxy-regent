@@ -1,8 +1,8 @@
-import { Action, NgxsOnInit, State, StateContext, Store } from '@ngxs/store';
+import { Action, State, StateContext, Store } from '@ngxs/store';
 import { Injectable } from '@angular/core';
 import { RequestItem } from '@prm/shared';
 import { WsService } from '../../services';
-import { GetAll, ReceiveAll } from './requests.actions';
+import { Update } from './requests.actions';
 
 export type RequestsStateModel = RequestItem[];
 
@@ -11,18 +11,14 @@ export type RequestsStateModel = RequestItem[];
     defaults: []
 })
 @Injectable()
-export class RequestsState implements NgxsOnInit {
+export class RequestsState {
     constructor(private wsService: WsService, private store: Store) {
-        this.wsService.registerActions([ReceiveAll]);
+        this.wsService.registerActions([Update]);
     }
 
-    ngxsOnInit() {
-        this.store.dispatch(new GetAll())
-    }
-
-    @Action(ReceiveAll)
-    receiveAll({setState}: StateContext<RequestsStateModel>, {requests}: ReceiveAll) {
-        setState(requests);
+    @Action(Update)
+    receiveAll({setState}: StateContext<RequestsStateModel>, {requests}: Update) {
+        // TODO
     }
 
 }

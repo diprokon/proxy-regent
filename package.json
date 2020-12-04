@@ -7,7 +7,7 @@
   },
   "scripts": {
     "build": "npm run clean && npm run build:server && npm run build:client",
-    "start:server": "nodemon --watch projects/server -e ts --exec ts-node --project projects/server/tsconfig.server.json projects/server/main.ts -t http://localhost",
+    "start:server": "nodemon --watch projects/server -e ts --exec ts-node -r tsconfig-paths/register --project projects/server/tsconfig.server.json projects/server/main.ts -t http://localhost",
     "start:client": "ng serve",
     "build:server": "tsc --project projects/server/tsconfig.server.json",
     "build:client": "ng build --prod",
@@ -50,8 +50,10 @@
     "nodemon": "^2.0.4",
     "rxjs": "~6.6.0",
     "ts-node": "^9.0.0",
+    "tsconfig-paths": "^3.9.0",
     "tslib": "^2.0.0",
     "tslint": "~6.1.0",
+    "typed-emitter": "^1.3.1",
     "typescript": "~4.0.2",
     "zone.js": "~0.10.2"
   }

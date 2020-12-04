@@ -1,53 +1,63 @@
-import { RequestItem, WsActionModel } from '@prm/shared';
-import { cache } from '../proxy-mock';
+import { ActionType, RequestItem, UpdatedItem, WsAction, WsActions, WsRequests, WsSkipRequestModel } from '@prm/shared';
+import { cache, CacheAction, ResponseObject } from '../proxy-mock';
 import { Action } from './api-action';
 
+function responseObjectToRequestItem(item: ResponseObject): RequestItem {
+    return {
+        key: item.key,
+        skip: !!item.skip,
+        status: item.status,
+    };
+}
+
 export class Api {
-    constructor(private send: (msg: WsActionModel) => void) {
+    constructor(private send: (msg: WsAction) => void) {
     }
 
     init() {
         this.send({
-            action: 'state',
+            action: WsActions.STATE,
             data: cache.isActive
         });
-    }
 
-    storeUpdates() {
-        this.allKeys();
-    }
-
-    @Action('allKeys')
-    allKeys() {
-        const allKeys: RequestItem[] = Array.from(cache.cache.entries())
-            .map(([key, res]) => ({
-                key,
-                status: 'status' in res ? res.status : 200,
-                skip: !!res.skip,
-            }))
+        const allKeys: UpdatedItem[] = Array.from(cache.cache.values())
+            .map(res => ({
+                type: ActionType.ADDED,
+                item: responseObjectToRequestItem(res)
+            }));
 
         this.send({
-            action: 'allKeys',
+            action: WsActions.UPDATE,
             data: allKeys
         });
     }
 
-    @Action('remove')
+    storeUpdates(actions: CacheAction[]) {
+        this.send({
+            action: WsActions.UPDATE,
+            data: actions.map(a => ({
+                type: a.type,
+                item: responseObjectToRequestItem(a.item)
+            }))
+        })
+    }
+
+    @Action(WsRequests.REMOVE)
     remove(keys: string[]) {
         cache.remove(keys);
     }
 
-    @Action('state')
+    @Action(WsRequests.STATE)
     setState(state: boolean) {
-        cache.isActive = state;
+        cache.setIsActive(state);
         this.send({
-            action: 'state',
+            action: WsActions.STATE,
             data: cache.isActive
         })
     }
 
-    @Action('skipKey')
-    skipKey({keys, skip}: { keys: string[], skip: boolean }) {
+    @Action(WsRequests.SKIP)
+    skipKey({keys, skip}: WsSkipRequestModel) {
         cache.skip(keys, skip);
     }
 }

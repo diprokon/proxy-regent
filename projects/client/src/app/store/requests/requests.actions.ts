@@ -1,31 +1,26 @@
-import { RequestItem, WsActionModel } from '@prm/shared';
+import { UpdatedItem, WsActions, WsRemoveRequest, WsRequests, WsSkipRequest, WsSkipRequestModel } from '@prm/shared';
 
-export class ReceiveAll {
-    static readonly type = '[Requests] Receive all';
-    static readonly action = 'allKeys';
+export class Update {
+    static readonly type = '[Requests] Update';
+    static readonly action = WsActions.UPDATE;
 
-    constructor(public requests: RequestItem[]) {
+    constructor(public requests: UpdatedItem[]) {
     }
 }
 
-export class GetAll implements WsActionModel {
-    static readonly type = '[Requests] Get all';
-    readonly action = 'allKeys';
-}
-
-export class Remove implements WsActionModel<string[]> {
+export class Remove implements WsRemoveRequest {
     static readonly type = '[Requests] Remove';
-    readonly action = 'remove';
+    readonly action = WsRequests.REMOVE;
 
     constructor(public data: string[]) {
     }
 }
 
-export class SkipKey implements WsActionModel<{ keys: string[], skip: boolean }> {
+export class SkipKey implements WsSkipRequest {
     static readonly type = '[Requests] Skip Key';
-    readonly action = 'skipKey';
+    readonly action = WsRequests.SKIP;
 
-    constructor(public data: { keys: string[], skip: boolean }) {
+    constructor(public data: WsSkipRequestModel) {
     }
 }
 

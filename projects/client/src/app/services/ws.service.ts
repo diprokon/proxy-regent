@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
+import { webSocket } from 'rxjs/webSocket';
 import { filter, map } from 'rxjs/operators';
 import { Actions, Store } from '@ngxs/store';
-import { isWsActionModel, WsActionModel } from '@prm/shared';
+import { isWsRequest, WsAction, WsRequest } from '@prm/shared';
 import { environment } from '../../environments/environment';
 
 const successfulActionStatus = 'SUCCESSFUL';
@@ -17,18 +17,18 @@ export interface WsResponseAction {
     providedIn: 'root'
 })
 export class WsService {
-    private webSocket: WebSocketSubject<WsActionModel> = webSocket(environment.wsUrl);
+    private webSocket = webSocket<WsAction | WsRequest>(environment.wsUrl);
 
     private readonly actions = new Map<string, WsResponseAction[]>();
 
     constructor(private store: Store, private actions$: Actions) {
-        this.webSocket.subscribe(msg => {
+        this.webSocket.subscribe((msg: WsAction) => {
             (this.actions.get(msg.action) || [])
                 .forEach(action => this.store.dispatch(new action(msg.data)))
         });
         this.actions$
             .pipe(
-                filter((action) => action.status === successfulActionStatus && isWsActionModel(action.action)),
+                filter((action) => action.status === successfulActionStatus && isWsRequest(action.action)),
                 map(action => action.action)
             )
             .subscribe(action => {
@@ -36,7 +36,7 @@ export class WsService {
             });
     }
 
-    send(action: WsActionModel) {
+    send(action: WsRequest) {
         this.webSocket.next(action);
     }
 

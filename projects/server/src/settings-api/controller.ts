@@ -1,6 +1,6 @@
 import * as WSWebSocket from 'ws';
-import { cache } from '../proxy-mock';
-import { WsActionModel } from '@prm/shared';
+import { WsAction, WsRequest } from '@prm/shared';
+import { cache, CacheAction } from '../proxy-mock';
 import { Api } from './api';
 import { getApiAction } from './api-action';
 
@@ -14,27 +14,27 @@ export class Controller {
             this.onRequest(JSON.parse(msg))
         });
 
-        cache.addListener('updated', this.storeUpdates);
+        cache.addListener('update', this.storeUpdates);
 
         this.api.init();
     }
 
-    send(msg: WsActionModel) {
+    send(msg: WsAction) {
         this.ws.send(JSON.stringify(msg));
     }
 
-    onRequest({action, data}: WsActionModel) {
+    onRequest({action, data}: WsRequest) {
         const apiActionProp = getApiAction(this.api, action);
         if (this.api[apiActionProp]) {
             this.api[apiActionProp](data);
         }
     }
 
-    storeUpdates = () => {
-        this.api.storeUpdates()
+    storeUpdates = (actions: CacheAction[]) => {
+        this.api.storeUpdates(actions)
     }
 
     destroy() {
-        cache.removeListener('updated', this.storeUpdates);
+        cache.removeListener('update', this.storeUpdates);
     }
 }

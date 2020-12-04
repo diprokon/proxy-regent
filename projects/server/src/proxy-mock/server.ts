@@ -1,7 +1,7 @@
 import { IncomingMessage } from 'http';
 import * as express from 'express';
 import * as HttpProxyServer from 'http-proxy';
-import { cache, Res } from './store';
+import { cache, ResponseObject } from './store';
 import { args, info, log, say } from '../shared';
 
 export class ProxyMockServer {
@@ -22,7 +22,7 @@ export class ProxyMockServer {
 
         this.proxy.on('proxyRes', async (proxyRes, req, res) => {
             const value = await this.getProxyData(req, proxyRes);
-            cache.set(req.url, value);
+            cache.set(value.key, value);
         });
 
         this.server.use((req, res, next) => {
@@ -53,7 +53,7 @@ export class ProxyMockServer {
             });
     }
 
-    private async getProxyData(req: IncomingMessage, proxyRes: IncomingMessage): Promise<Res> {
+    private async getProxyData(req: IncomingMessage, proxyRes: IncomingMessage): Promise<ResponseObject> {
         return new Promise((resolve) => {
             const data = [];
             proxyRes.on('data', (d) => {
@@ -61,6 +61,7 @@ export class ProxyMockServer {
             });
             proxyRes.on('close', () => {
                 resolve({
+                    key: req.url,
                     data: Buffer.concat(data).toString(),
                     headers: proxyRes.headers,
                     status: proxyRes.statusCode

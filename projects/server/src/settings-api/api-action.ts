@@ -1,6 +1,8 @@
+import { WsRequests } from '@prm/shared';
+
 const actionMapProp = Symbol('actionMapProp');
 
-export function Action(action: string) {
+export function Action(action: WsRequests) {
     return (
         target: any,
         propertyKey: string
