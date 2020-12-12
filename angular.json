@@ -46,6 +46,7 @@
             "tsConfig": "projects/client/tsconfig.client.json",
             "aot": true,
             "assets": [
+              "projects/client/src/favicon.svg",
               "projects/client/src/favicon.ico",
               "projects/client/src/assets"
             ],

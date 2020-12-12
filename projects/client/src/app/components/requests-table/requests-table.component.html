@@ -1,8 +1,8 @@
 <table mat-table [dataSource]="dataSource" matSort>
-    <tr mat-header-row *matHeaderRowDef="['checked-amount', 'bulk-action']; sticky: true" [class.bg-accent]="selection.selected.length"></tr>
+    <tr mat-header-row *matHeaderRowDef="['checked-amount', 'bulk-action']; sticky: true" [class.bg-primary]="selection.selected.length"></tr>
     <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
     <tr mat-row *matRowDef="let req; columns: displayedColumns;"
-        (click)="selection.toggle(req)"
+        (click)="selection.toggle(req.key)"
     ></tr>
 
     <ng-container matColumnDef="checked-amount">
@@ -13,25 +13,25 @@
 
     <ng-container matColumnDef="bulk-action">
         <th mat-header-cell *matHeaderCellDef [attr.colspan]="2">
-<!--        <mat-slide-toggle
-                [checked]="true"
-                (change)="toggleSkipState($event, selection.selected)"
-            ></mat-slide-toggle> -->
-            <button mat-icon-button
-                *ngIf="selection.selected.length"
-                color="warn"
-                [disabled]="!selection.selected.length"
-                (click)="remove(selection.selected)"
-            >
-                <mat-icon>delete</mat-icon>
-            </button>
+            <ng-container *ngIf="selection.selected.length">
+                <mat-slide-toggle
+                    [checked]="true"
+                    (change)="toggleSkipState($event, selection.selected)"
+                ></mat-slide-toggle>
+                <button mat-icon-button
+                    color="warn"
+                    (click)="remove($event, selection.selected)"
+                >
+                    <mat-icon>delete</mat-icon>
+                </button>
+            </ng-container>
         </th>
     </ng-container>
 
     <ng-container matColumnDef="checkbox">
         <th mat-header-cell *matHeaderCellDef>
             <mat-checkbox
-                (change)="$event ? masterToggle() : null"
+                (change)="masterToggle()"
                 [checked]="selection.hasValue() && isAllSelected()"
                 [indeterminate]="selection.hasValue() && !isAllSelected()"
             ></mat-checkbox>
@@ -39,8 +39,8 @@
         <td mat-cell *matCellDef="let req">
             <mat-checkbox
                 (click)="$event.stopPropagation()"
-                (change)="$event ? selection.toggle(req) : null"
-                [checked]="selection.isSelected(req)"
+                (change)="selection.toggle(req.key)"
+                [checked]="selection.isSelected(req.key)"
             ></mat-checkbox>
         </td>
     </ng-container>
@@ -64,12 +64,14 @@
         </th>
         <td mat-cell *matCellDef="let req">
             <mat-slide-toggle
+                (click)="$event.stopPropagation()"
                 [checked]="!req.skip"
-                (change)="toggleSkipState($event, [ req ])"
+                (change)="toggleSkipState($event, [ req.key ])"
             ></mat-slide-toggle>
             <button mat-icon-button
+                (click)="$event.stopPropagation()"
                 color="warn"
-                (click)="remove([ req ])"
+                (click)="remove($event, [ req.key ])"
             >
                 <mat-icon>delete</mat-icon>
             </button>

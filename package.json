@@ -7,7 +7,7 @@
   },
   "scripts": {
     "build": "npm run clean && npm run build:server && npm run build:client",
-    "start:server": "nodemon --watch projects/server -e ts --exec ts-node -r tsconfig-paths/register --project projects/server/tsconfig.server.json projects/server/main.ts -t http://localhost",
+    "start:server": "nodemon --watch projects/server -e ts --exec ts-node -r tsconfig-paths/register --project projects/server/tsconfig.server.json projects/server/main.ts -t http://localhost:3000",
     "start:client": "ng serve",
     "build:server": "tsc --project projects/server/tsconfig.server.json",
     "build:client": "ng build --prod",

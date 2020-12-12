@@ -18,13 +18,15 @@ export class RequestsTableComponent implements AfterViewInit {
 
     displayedColumns: string[] = ['checkbox', 'key', 'status', 'actions'];
     dataSource = new MatTableDataSource<RequestItem>();
-    selection = new SelectionModel<RequestItem>(true, []);
+    selection = new SelectionModel<string>(true, []);
 
     @Select(RequestsState)
     requests$: Observable<RequestItem[]>;
 
     constructor(private store: Store) {
-        this.requests$.subscribe(data => this.dataSource.data = data);
+        this.requests$.subscribe(data => {
+            this.dataSource.data = data;
+        })
     }
 
     @ViewChild(MatSort) sort: MatSort;
@@ -37,16 +39,13 @@ export class RequestsTableComponent implements AfterViewInit {
         return status < 400;
     }
 
-    remove(reqs: RequestItem[]) {
-        const keys = reqs.map(req => req.key);
+    remove(value: MatSlideToggleChange, keys: string[]) {
+        keys.forEach(key => this.selection.deselect(key));
         this.store.dispatch(new Remove(keys));
-        this.selection.clear();
     }
 
-    toggleSkipState(value: MatSlideToggleChange, reqs: RequestItem[]) {
-        const keys = reqs.map(req => req.key);
+    toggleSkipState(value: MatSlideToggleChange, keys: string[]) {
         this.store.dispatch(new SkipKey({ keys: keys, skip: !value.checked }));
-        this.selection.clear();
     }
 
     isAllSelected() {
@@ -58,6 +57,6 @@ export class RequestsTableComponent implements AfterViewInit {
     masterToggle() {
         this.isAllSelected()
             ? this.selection.clear()
-            : this.dataSource.data.forEach(req => this.selection.select(req));
+            : this.dataSource.data.forEach(req => this.selection.select(req.key));
     }
 }
