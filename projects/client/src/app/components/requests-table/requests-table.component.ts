@@ -39,6 +39,17 @@ export class RequestsTableComponent implements AfterViewInit {
         return status < 400;
     }
 
+    getMethodClass(method: string): string {
+        switch(method) {
+            case 'DELETE':
+                return 'text-warn';
+            case 'GET':
+                return 'text-primary';
+            default:
+                return 'text-accent';
+        }
+    }
+
     remove(value: MatSlideToggleChange, keys: string[]) {
         keys.forEach(key => this.selection.deselect(key));
         this.store.dispatch(new Remove(keys));
