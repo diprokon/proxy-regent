@@ -7,6 +7,7 @@ function responseObjectToRequestItem(item: ResponseObject): RequestItem {
         key: item.key,
         skip: !!item.skip,
         status: item.status,
+        method: item.method,
     };
 }
 

@@ -16,7 +16,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 })
 export class RequestsTableComponent implements AfterViewInit {
 
-    displayedColumns: string[] = ['checkbox', 'key', 'status', 'actions'];
+    displayedColumns: string[] = ['checkbox', 'key', 'method', 'status', 'actions'];
     dataSource = new MatTableDataSource<RequestItem>();
     selection = new SelectionModel<string>(true, []);
 

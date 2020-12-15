@@ -5,5 +5,6 @@ export interface ResponseObject {
     data: string;
     headers: OutgoingHttpHeaders;
     status: number;
+    method: string;
     skip?: boolean;
 }

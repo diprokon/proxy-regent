@@ -35,6 +35,7 @@ export class ProxyMockServer {
             res
                 .set(value.headers)
                 .status(value.status)
+                .set(value.method)
                 .send(value.data);
         });
         this.server.use((req, res) => {
@@ -64,7 +65,8 @@ export class ProxyMockServer {
                     key: req.url,
                     data: Buffer.concat(data).toString(),
                     headers: proxyRes.headers,
-                    status: proxyRes.statusCode
+                    status: proxyRes.statusCode,
+                    method: req.method,
                 });
             });
         });
