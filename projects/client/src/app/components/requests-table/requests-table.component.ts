@@ -4,9 +4,9 @@ import { MatSort } from '@angular/material/sort';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { Observable } from 'rxjs';
 import { Select, Store } from '@ngxs/store';
-import { RequestItem } from '@prm/shared';
-import { Remove, RequestsState, SkipKey } from '../../store/requests';
+import { RequestItem, RequestMethod } from '@prm/shared';
 import { SelectionModel } from '@angular/cdk/collections';
+import { Remove, RequestsState, SkipKey } from '../../store';
 
 
 @Component({
@@ -39,30 +39,30 @@ export class RequestsTableComponent implements AfterViewInit {
         return status < 400;
     }
 
-    getMethodClass(method: string): string {
+    getMethodClass(method: RequestMethod): string {
         switch(method) {
-            case 'DELETE':
+            case RequestMethod.DELETE:
                 return 'text-warn';
-            case 'GET':
+            case RequestMethod.GET:
                 return 'text-primary';
             default:
                 return 'text-accent';
         }
     }
 
-    remove(value: MatSlideToggleChange, keys: string[]) {
+    remove($event: MouseEvent, keys: string[]) {
         keys.forEach(key => this.selection.deselect(key));
         this.store.dispatch(new Remove(keys));
     }
 
     toggleSkipState(value: MatSlideToggleChange, keys: string[]) {
-        this.store.dispatch(new SkipKey({ keys: keys, skip: !value.checked }));
+        this.store.dispatch(new SkipKey({ keys, skip: !value.checked }));
     }
 
     isAllSelected() {
         const numSelected = this.selection.selected.length;
         const numRows = this.dataSource.data.length;
-        return numSelected == numRows;
+        return numSelected === numRows;
       }
 
     masterToggle() {

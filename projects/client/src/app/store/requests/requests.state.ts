@@ -17,25 +17,32 @@ export class RequestsState {
     }
 
     @Action(Update)
-    receiveAll({setState}: StateContext<RequestsStateModel>, {requests}: Update) {
+    receiveAll({ setState }: StateContext<RequestsStateModel>, { requests }: Update) {
         setState(existed => {
-            let newState = [ ...existed];
-            requests.forEach(request => {
-                if (request.type === ActionType.ADDED) {
-                    newState.push(request.item);
-                } else {
+                const newState = [...existed];
+                requests.forEach(request => {
                     const index = newState.findIndex(item => request.item.key === item.key);
-                    if (index > -1) {
-                        if (request.type === ActionType.REMOVED) {
-                            newState.splice(index, 1);
-                        } else {
-                            newState[index] = request.item; // ActionType.MODIFIED
-                        }
+                    switch (request.type) {
+                        case ActionType.ADDED:
+                            newState.push(request.item);
+                            break;
+                        case ActionType.MODIFIED:
+                            if (index > -1) {
+                                newState[index] = request.item;
+                            }
+                            break;
+                        case ActionType.REMOVED:
+                            if (index > -1) {
+                                newState.splice(index, 1);
+                            }
+                            break;
+                        default:
+                            break;
                     }
-                }
-            });
-            return newState;
-        });
+                });
+                return newState;
+            }
+        );
     }
 
 }

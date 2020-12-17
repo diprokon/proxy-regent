@@ -35,8 +35,8 @@ class Cache extends (EventEmitter as new () => TypedEmitter<CacheEvents>) {
                 if (savedCache) {
                     return JSON.parse(savedCache.toString()) as CacheFileData;
                 }
-            }, () => {
             })
+            .catch(() => {})
             .then((savedCache) => {
                 this.cache = new Map<string, ResponseObject>(savedCache && savedCache.cache ? savedCache.cache.map(c => ([c.key, c])) : []);
                 if (savedCache) {
@@ -65,7 +65,11 @@ class Cache extends (EventEmitter as new () => TypedEmitter<CacheEvents>) {
         skippedHeaders.forEach(header => {
             delete value.headers[header];
         });
-        const isNew = this.cache.has(key);
+        const isNew = !this.cache.has(key);
+        if (!isNew) {
+            const oldValue = this.cache.get(key);
+            value.skip = oldValue.skip;
+        }
         this.cache.set(key, value);
         this.write();
         this.emit('update', [{

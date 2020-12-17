@@ -3,6 +3,7 @@ import * as express from 'express';
 import * as HttpProxyServer from 'http-proxy';
 import { cache, ResponseObject } from './store';
 import { args, info, log, say } from '../shared';
+import { RequestMethod } from '@prm/shared';
 
 export class ProxyMockServer {
     private port = parseInt(args.port, 10);
@@ -66,7 +67,7 @@ export class ProxyMockServer {
                     data: Buffer.concat(data).toString(),
                     headers: proxyRes.headers,
                     status: proxyRes.statusCode,
-                    method: req.method,
+                    method: req.method.toLowerCase() as RequestMethod,
                 });
             });
         });

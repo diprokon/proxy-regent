@@ -7,7 +7,7 @@
   },
   "scripts": {
     "build": "npm run clean && npm run build:server && npm run build:client",
-    "start:server": "nodemon --watch projects/server -e ts --exec ts-node -r tsconfig-paths/register --project projects/server/tsconfig.server.json projects/server/main.ts -t http://localhost:3000",
+    "start:server": "nodemon --watch projects/server -e ts --exec ts-node -r tsconfig-paths/register --project projects/server/tsconfig.server.json projects/server/main.ts -t http://localhost",
     "start:client": "ng serve",
     "build:server": "tsc --project projects/server/tsconfig.server.json",
     "build:client": "ng build --prod",
@@ -38,6 +38,7 @@
     "@angular/compiler-cli": "~10.1.6",
     "@angular/core": "~10.1.6",
     "@angular/forms": "~10.1.6",
+    "@angular/language-service": "^11.0.5",
     "@angular/material": "^10.2.5",
     "@angular/platform-browser": "~10.1.6",
     "@angular/platform-browser-dynamic": "~10.1.6",
