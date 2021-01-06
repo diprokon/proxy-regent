@@ -1,20 +1,23 @@
 import { IncomingMessage } from 'http';
 import * as express from 'express';
 import * as HttpProxyServer from 'http-proxy';
+import { parse } from 'url';
 import { cache, ResponseObject } from './store';
 import { args, info, log, say } from '../shared';
 import { RequestMethod } from '@prm/shared';
 
 export class ProxyMockServer {
     private port = parseInt(args.port, 10);
-    private readonly target: string;
+    private readonly target: string = args.target;
     private proxy = HttpProxyServer.createProxyServer();
     private server = express();
 
     constructor() {
-        this.target = args.target;
         if (!this.target) {
             throw new Error('Please provide target url: -t <target>');
+        }
+        if (!parse(this.target).protocol) {
+            throw new Error(`Please provide target's protocol (http|https)`);
         }
     }
 
