@@ -1,7 +1,22 @@
 {
-  "name": "proxy-mock",
-  "version": "0.0.0",
-  "description": "",
+  "name": "proxy-regent",
+  "version": "0.0.1",
+  "description": "A proxy server that caches responses",
+  "author": {
+    "name": "Dmytro Prokhorov",
+    "url": "https://github.com/diprokon"
+  },
+  "contributors": [
+    {
+      "name": "Elena Shokhan",
+      "url": "https://https://github.com/Shelenium"
+    }
+  ],
+  "keywords": [
+    "proxy",
+    "cache",
+    "mock"
+  ],
   "bin": {
     "proxy-mock": "cli.js"
   },
@@ -17,7 +32,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "ng lint"
   },
-  "license": "ISC",
+  "license": "MIT",
   "files": [
     "bin"
   ],

@@ -23,7 +23,7 @@ class Cache extends (EventEmitter as new () => TypedEmitter<CacheEvents>) {
     public isActive = true;
 
     cache: Map<string, ResponseObject>;
-    private filePath = join(process.cwd(), args.mockPath);
+    private filePath = join(process.cwd(), args.cachePath);
 
     private skipKeys: { [key: string]: boolean } = {};
 

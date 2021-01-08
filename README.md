@@ -1,23 +1,25 @@
-# ProxyMock
-A proxy server, which mock data after first request
+# Proxy Regent
+A proxy server that caches responses
 
 ## Installation and usage
 
+To install the proxy
+
+`$ npm i -g proxy-regent`
+
 To start the proxy
 
-`$ npm i -g proxy-mock`
-
-To start the proxy
-
-`$ proxy-mock -t http://your-api.url`
+`$ proxy-regent -t http://your-api.url`
 
 By default, it uses 3003 port
+
+You can see cached requests, enable/disable on http://localhost:3004
 
 ## CLI options
 
 `-t <target>`, `--target <target>`: proxy target
 
-`-m <mockPath>`, `--mockPath <mockPath>`: Path to cache file (default `tmp/mock-data.json`)
+`-c <cachePath>`, `--cachePath <cachePath>`: Path to cache file (default `tmp/cache-data.json`)
 
 `-p <port>`, `--port <port>`: Port (default `3003`)
 
