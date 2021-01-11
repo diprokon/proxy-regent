@@ -18,7 +18,7 @@
     "mock"
   ],
   "bin": {
-    "proxy-mock": "cli.js"
+    "proxy-regent": "cli.js"
   },
   "scripts": {
     "postinstall": "ts-patch install",
