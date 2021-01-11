@@ -1,7 +1,8 @@
 {
   "name": "proxy-regent",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A proxy server that caches responses",
+  "homepage": "https://github.com/diprokon/proxy-regent",
   "author": {
     "name": "Dmytro Prokhorov",
     "url": "https://github.com/diprokon"
@@ -17,6 +18,9 @@
     "cache",
     "mock"
   ],
+  "bugs": {
+    "url": "https://github.com/diprokon/proxy-regent/issues"
+  },
   "bin": {
     "proxy-regent": "cli.js"
   },
